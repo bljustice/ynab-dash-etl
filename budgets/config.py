@@ -2,10 +2,11 @@ import os
 from typing import Dict
 
 
-class BaseConfig:
+class BaseConfig(object):
     """
     Base config for job
     """
+
     TESTING = False
     DEBUG = False
     YNAB_PERSONAL_TOKEN = os.environ['YNAB_PERSONAL_TOKEN']
@@ -16,6 +17,7 @@ class DevConfig(BaseConfig):
     """
     Local config for job
     """
+
     TESTING = True
     DEBUG = True
 
@@ -31,6 +33,17 @@ def build_config(env: str) -> Dict:
     """
     Used to build config object in ETL job
     """
-    env_dict = vars(DevConfig) if env == 'development' else vars(ProdConfig)
-    config_dict = {**env_dict, **{'ENV': env}}
+    env_config = DevConfig if env == 'development' else ProdConfig
+
+    token_dict = {
+        'YNAB_PERSONAL_TOKEN': env_config.YNAB_PERSONAL_TOKEN,
+        'YNAB_BUDGET_ID': env_config.YNAB_BUDGET_ID,
+    }
+
+    config_dict = {
+        **{'ENV': 'env'},
+        **vars(env_config),
+        **token_dict,
+    }
+
     return config_dict
