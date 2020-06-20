@@ -1,8 +1,9 @@
+from ynabdashetl import __version__
 from setuptools import setup, find_packages
 
 setup(
     name='YNAB Dash ETL',
-    version='1.0.0',
+    version=__version__,
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
     zip_safe=False,
