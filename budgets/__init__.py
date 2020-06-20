@@ -40,7 +40,7 @@ class BudgetJob:
         return final_budget_dict
 
     @staticmethod
-    def add_snapshot_date():
+    def add_snapshot_date() -> Dict:
         """
         Simply gets today's date and tomorrow's date and
         puts them into a dictionary to combine with budget data.
@@ -56,7 +56,7 @@ class BudgetJob:
             'end_date': end_date,
         }
 
-    def run(self):
+    def run(self) -> Dict:
         """
         Includes all code to complete ETL
         """
