@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from budgets import BudgetJob
+from ynabdashetl.budgets import BudgetJob
 from ynab.budgets import Budgets
 
 

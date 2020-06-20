@@ -1,4 +1,4 @@
-from budgets import BudgetJob
+from ynabdashetl.budgets import BudgetJob
 
 if __name__ == '__main__':
     

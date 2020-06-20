@@ -4,8 +4,8 @@ from typing import Dict
 
 from ynab.budgets import Budgets
 
-from budgets.config import build_config
-from budgets.helpers import get_env
+from ynabdashetl.budgets.config import build_config
+from ynabdashetl.budgets.helpers import get_env
 
 NAME = 'ynab.etl.budgetjob'
 
