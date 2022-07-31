@@ -1,5 +1,8 @@
+import os
+import json
 import logging
 import datetime
+import pandas as pd
 from typing import Dict
 
 from ynab.budgets import Budgets
@@ -17,6 +20,7 @@ class BudgetJob:
 
     name = NAME
     config = build_config(get_env())
+    budget_folder = os.path.join(os.getcwd(), 'data/budgets')
 
     def get_budget_info(self, client: Budgets) -> Dict:
         """
@@ -56,6 +60,20 @@ class BudgetJob:
             'end_date': end_date,
         }
 
+    @staticmethod
+    def parse_budget_response(json_response: Dict) -> Dict:
+        """
+        Parse budget API response
+        """
+        return json_response['data']
+
+    @staticmethod
+    def to_dataframe(budget_info: Dict) -> pd.core.frame.DataFrame:
+        """
+        Converts json response into pandas dataframe
+        """
+        return pd.DataFrame(budget_info)
+
     def run(self) -> Dict:
         """
         Includes all code to complete ETL
@@ -64,7 +82,15 @@ class BudgetJob:
         log.info('Starting job')
         token = self.config['YNAB_PERSONAL_TOKEN']
 
+        log.info('Getting budget info')
         client = Budgets(token)
         budget_info = self.get_budget_info(client)
+
+        log.info('Writing json to file')
+        write_filename = '.'.join([datetime.date.strftime(datetime.date.today(), '%Y-%m-%d'), 'json'])
+        write_file_location = os.path.join(self.budget_folder, write_filename)
+        with open(write_file_location, 'w') as f:
+            json.dump(budget_info, f)
+
         log.info('Job complete')
-        return budget_info
+        return True
