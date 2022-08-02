@@ -66,7 +66,7 @@ class BudgetExtractJob:
         """
         return json_response['data']
 
-    def run(self) -> Dict:
+    def run(self) -> bool:
         """
         Includes all code to complete ETL
         """
