@@ -1,6 +1,6 @@
 import unittest
 
-from ynabdashetl.budgets.config import build_config
+from ynabdashetl.extract.config import build_config
 
 
 class ConfigTests(unittest.TestCase):

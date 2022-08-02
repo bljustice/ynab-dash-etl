@@ -2,25 +2,24 @@ import os
 import json
 import logging
 import datetime
-import pandas as pd
 from typing import Dict
 
 from ynab.budgets import Budgets
 
-from ynabdashetl.budgets.config import build_config
-from ynabdashetl.budgets.helpers import get_env
+from ynabdashetl.extract.config import build_config
+from ynabdashetl.extract.helpers import get_env
 
-NAME = 'ynab.etl.budgetjob'
+NAME = 'ynab.etl.budgetextractjob'
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(NAME)
 
 
-class BudgetJob:
+class BudgetExtractJob:
 
     name = NAME
     config = build_config(get_env())
-    budget_folder = os.path.join(os.getcwd(), 'data/budgets')
+    budget_folder = os.path.join(os.getcwd(), 'data/budgets/extracts')
 
     def get_budget_info(self, client: Budgets) -> Dict:
         """
@@ -36,7 +35,7 @@ class BudgetJob:
         # add snapshot date to budget data
         log.info('Adding snapshot dates to data')
         final_budget_dict = {
-            **BudgetJob.add_snapshot_date(),
+            **BudgetExtractJob.add_snapshot_date(),
             **budget_info
         }
 
@@ -66,13 +65,6 @@ class BudgetJob:
         Parse budget API response
         """
         return json_response['data']
-
-    @staticmethod
-    def to_dataframe(budget_info: Dict) -> pd.core.frame.DataFrame:
-        """
-        Converts json response into pandas dataframe
-        """
-        return pd.DataFrame(budget_info)
 
     def run(self) -> Dict:
         """

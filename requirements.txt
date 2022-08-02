@@ -4,9 +4,10 @@ flake8==3.8.3
 idna==2.9
 importlib-metadata==1.6.1
 mccabe==0.6.1
+pandas==1.4.3
 pycodestyle==2.6.0
 pyflakes==2.2.0
 requests==2.24.0
 urllib3==1.25.9
--e git://github.com/bljustice/ynab-sdk-python.git@a1ad572bfcf3c1e7e7da48a985cb9f2d4531f8a9#egg=ynab_sdk_python
+git+https://github.com/bljustice/ynab-sdk-python.git@a1ad572bfcf3c1e7e7da48a985cb9f2d4531f8a9#egg=ynab_sdk_python
 zipp==3.1.0
