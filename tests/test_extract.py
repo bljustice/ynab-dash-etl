@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from ynabdashetl.budgets import BudgetJob
+from ynabdashetl.extract import BudgetExtractJob
 from ynab.budgets import Budgets
 
 
@@ -13,7 +13,7 @@ class TestBudgets(unittest.TestCase):
         """
         token = os.environ['YNAB_PERSONAL_TOKEN']
 
-        cls.job = BudgetJob()
+        cls.job = BudgetExtractJob()
         cls.client = Budgets(token)
 
     def test_add_snapshot_date(self):
