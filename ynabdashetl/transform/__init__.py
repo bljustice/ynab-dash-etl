@@ -3,7 +3,6 @@ import json
 import logging
 import pandas as pd
 
-from datetime import datetime
 from typing import Dict
 from sqlalchemy import create_engine
 
@@ -20,6 +19,11 @@ class BudgetTransformJob:
     name = NAME
     config = build_config(get_env())
     budget_folder = os.path.join(os.getcwd(), 'data/budgets/extracts')
+    source_schema = 'source'
+
+    def __init__(self, start_date):
+
+        self.start_date = start_date
 
     def load_budget_json(self, filename) -> Dict:
 
@@ -37,9 +41,9 @@ class BudgetTransformJob:
 
     def run(self) -> bool:
 
-        log.info("Loading today's budget file.")
-        todays_date = '.'.join([datetime.strftime(datetime.today(), '%Y-%m-%d'), 'json'])
-        budget_json = self.load_budget_json(todays_date)
+        log.info(f"Loading {self.start_date}'s budget file.")
+        budget_file = '.'.join([self.start_date, 'json'])
+        budget_json = self.load_budget_json(budget_file)
 
         log.info("Converting JSON into dataframe")
         budget_data = budget_json['data']['budget']
@@ -67,10 +71,15 @@ class BudgetTransformJob:
         conn = BudgetTransformJob._create_postgres_conn(**conn_details)
 
         log.info('Loading source tables into postgres')
-        transaction_df.to_sql('ynab_transactions', conn, schema='warehouse', index=False)
-        payee_df.to_sql('ynab_payees', conn, schema='warehouse', index=False)
-        accounts_df.to_sql('ynab_accounts', conn, schema='warehouse', index=False)
-        categories_df.to_sql('ynab_categories', conn, schema='warehouse', index=False)
+        engine_dict = {
+            'con': conn,
+            'schema': self.source_schema,
+            'index': False,
+        }
+        transaction_df.to_sql('ynab_transactions', **engine_dict)
+        payee_df.to_sql('ynab_payees', **engine_dict)
+        accounts_df.to_sql('ynab_accounts', **engine_dict)
+        categories_df.to_sql('ynab_categories', **engine_dict)
 
         log.info("Job completed")
         return True
