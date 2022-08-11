@@ -11,5 +11,5 @@ pyflakes==2.2.0
 requests==2.24.0
 SQLAlchemy==1.4.39
 urllib3==1.25.9
-git+https://github.com/bljustice/ynab-sdk-python.git@a1ad572bfcf3c1e7e7da48a985cb9f2d4531f8a9#egg=ynab_sdk_python
+git+https://github.com/bljustice/ynab-sdk-python.git@367c6ac1581c5d7b222b3e0dbbb288a0fe9dcbea#egg=ynab_sdk_python
 zipp==3.1.0
