@@ -78,4 +78,3 @@ class ExtractJob:
         log.info('Data written successfully.')
         log.info('Job complete')
         return True
-        
