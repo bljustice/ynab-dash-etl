@@ -10,11 +10,6 @@ class BaseConfig(object):
     YNAB_PERSONAL_TOKEN = os.environ['YNAB_PERSONAL_TOKEN']
     YNAB_BUDGET_ID = os.environ['YNAB_BUDGET_ID']
 
-    ACCOUNTS_PATH = 'accounts'
-    PAYEES_PATH = 'payees'
-    CATEGORIES_PATH = 'categories'
-    TRANSACTIONS_PATH = 'transactions'
-
 
 class DevConfig(BaseConfig):
     """
