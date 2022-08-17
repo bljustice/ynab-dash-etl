@@ -1,4 +1,3 @@
-import os
 import unittest
 
 from ynabdashetl.core.config import build_config
