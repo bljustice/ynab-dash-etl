@@ -18,5 +18,5 @@ requests==2.24.0
 six==1.16.0
 SQLAlchemy==1.4.39
 urllib3==1.25.9
-ynab-sdk-python==0.0.4
+git+https://github.com/bljustice/ynab-sdk-python.git@a1ad572bfcf3c1e7e7da48a985cb9f2d4531f8a9#egg=ynab_sdk_python
 zipp==3.1.0
