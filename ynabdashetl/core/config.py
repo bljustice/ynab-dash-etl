@@ -1,6 +1,4 @@
 import os
-from typing import Dict
-
 
 class BaseConfig(object):
     """
@@ -26,24 +24,13 @@ class ProdConfig(BaseConfig):
     """
     Prod config for job
     """
-    pass
+    TESTING = False
+    DEBUG = False
 
 
-def build_config(env: str) -> Dict:
+def build_config(env: str):
     """
     Used to build config object in ETL job
     """
     env_config = DevConfig if env == 'development' else ProdConfig
-
-    token_dict = {
-        'YNAB_PERSONAL_TOKEN': env_config.YNAB_PERSONAL_TOKEN,
-        'YNAB_BUDGET_ID': env_config.YNAB_BUDGET_ID,
-    }
-
-    config_dict = {
-        **{'ENV': 'env'},
-        **vars(env_config),
-        **token_dict,
-    }
-
-    return config_dict
+    return env_config
