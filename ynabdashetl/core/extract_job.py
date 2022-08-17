@@ -1,3 +1,5 @@
+import os
+import json
 import logging
 import datetime
 from typing import Dict, Union
@@ -28,13 +30,14 @@ class ExtractJob:
         self.extract_date = extract_date
 
     @property
-    def ynab_client(self) -> Union[Accounts, Budgets, Categories, Transactions]:
-
+    def ynab_api_method(self) -> Union[Accounts, Budgets, Categories, Transactions]:
+        
+        api_token = self.config.YNAB_PERSONAL_TOKEN
         client_dict = {
-            'accounts': Accounts,
-            'budgets': Budgets,
-            'categories': Categories,
-            'transactions': Transactions, 
+            'accounts': Accounts(api_token).get_accounts_by_budget_id,
+            'budgets': Budgets(api_token).get_budget_by_id,
+            'categories': Categories(api_token).get_categories_by_budget_id,
+            'transactions': Transactions(api_token).get_transactions_by_budget_id,
         }
         return client_dict[self.extract_name]
 
@@ -52,3 +55,28 @@ class ExtractJob:
             'start_date': start_date,
             'end_date': end_date,
         }
+
+    def run(self) -> bool:
+
+        #TODO: build out something that handles each class' api method efficiently
+        log.info(f'Starting {self.extract_name} job for {self.extract_date}')
+
+        params = {
+            'budget_id': self.config.YNAB_BUDGET_ID,
+        }
+
+        if self.extract_name == 'transactions':
+            params['since_date'] = self.extract_date
+
+        log.info(f'Calling {self.extract_name} endpoint')
+        api_response = self.ynab_api_method(**params)
+
+        write_path = os.path.join(os.getcwd(), f'data/{self.extract_name}/{self.extract_date}.json')
+        log.info(f'Writing data to {write_path}')
+        with open(write_path, 'w') as f:
+            json.dump(api_response, f)
+        
+        log.info('Data written successfully.')
+        log.info('Job complete')
+        return True
+        
