@@ -58,7 +58,6 @@ class ExtractJob:
 
     def run(self) -> bool:
 
-        #TODO: build out something that handles each class' api method efficiently
         log.info(f'Starting {self.extract_name} job for {self.extract_date}')
 
         params = {
@@ -71,7 +70,7 @@ class ExtractJob:
         log.info(f'Calling {self.extract_name} endpoint')
         api_response = self.ynab_api_method(**params)
 
-        write_path = os.path.join(os.getcwd(), f'data/{self.extract_name}/{self.extract_date}.json')
+        write_path = os.path.join(os.getcwd(), f'data/{self.config.ACCOUNTS_PATH}/{self.extract_date}.json')
         log.info(f'Writing data to {write_path}')
         with open(write_path, 'w') as f:
             json.dump(api_response, f)
