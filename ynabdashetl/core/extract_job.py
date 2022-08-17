@@ -22,7 +22,6 @@ class ExtractJob:
 
     name = NAME
     config = build_config(get_env())
-    # budget_folder = os.path.join(os.getcwd(), 'data/budgets/extracts')
 
     def __init__(self, extract_name: str, extract_date: str) -> None:
 
