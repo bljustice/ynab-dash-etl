@@ -1,4 +1,5 @@
 import os
+import boto3
 import json
 import logging
 import datetime
@@ -29,6 +30,17 @@ class ExtractJob:
         self.extract_date = extract_date
 
     @property
+    def s3_client(self) -> boto3.session.Session.client:
+
+        return boto3.client(
+            's3',
+            region_name=self.config.AWS_REGION_NAME,
+            aws_access_key_id=self.config.AWS_ACCESS_KEY,
+            aws_secret_access_key=self.config.AWS_SECRET_ACCESS_KEY,
+        )
+
+
+    @property
     def ynab_api_method(self) -> Union[Accounts, Budgets, Categories, Transactions]:
         
         api_token = self.config.YNAB_PERSONAL_TOKEN
@@ -55,6 +67,17 @@ class ExtractJob:
             'end_date': end_date,
         }
 
+    def put_json_to_s3(self, json_response, s3_key: str) -> bool:
+        
+        bucket_name = 'ynab'
+        self.s3_client.put_object(
+            Body=json.dumps(json_response),
+            Bucket=bucket_name,
+            Key=s3_key
+        )
+        return True
+
+
     def run(self) -> bool:
 
         log.info(f'Starting {self.extract_name} job for {self.extract_date}')
@@ -69,10 +92,10 @@ class ExtractJob:
         log.info(f'Calling {self.extract_name} endpoint')
         api_response = self.ynab_api_method(**params)
 
-        write_path = os.path.join(os.getcwd(), f'data/{self.extract_name}/{self.extract_date}.json')
-        log.info(f'Writing data to {write_path}')
-        with open(write_path, 'w') as f:
-            json.dump(api_response, f)
+        api_response_key = f'{self.extract_name}/{self.extract_date}.json'
+        log.info(f'Writing json response to {api_response_key} in s3')
+        self.put_json_to_s3(api_response, api_response_key)
+        self.s3_client.close()
         
         log.info('Data written successfully.')
         log.info('Job complete')

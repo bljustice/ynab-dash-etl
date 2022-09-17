@@ -9,6 +9,9 @@ class BaseConfig(object):
     DEBUG = False
     YNAB_PERSONAL_TOKEN = os.environ['YNAB_PERSONAL_TOKEN']
     YNAB_BUDGET_ID = os.environ['YNAB_BUDGET_ID']
+    AWS_REGION_NAME = os.environ['AWS_REGION_NAME']
+    AWS_ACCESS_KEY = os.environ['AWS_ACCESS_KEY']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 
 
 class DevConfig(BaseConfig):

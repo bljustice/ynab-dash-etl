@@ -15,4 +15,5 @@ class ConfigTests(unittest.TestCase):
  
         self.assertIn('YNAB_PERSONAL_TOKEN', dir(self.config))
         self.assertIn('YNAB_BUDGET_ID', dir(self.config))
+        self.assertIn('AWS_ACCESS_KEY', dir(self.config))
         self.assertEqual(self.config.DEBUG, True)
