@@ -30,5 +30,5 @@ SQLAlchemy==1.4.39
 urllib3==1.25.11
 Werkzeug==2.1.2
 xmltodict==0.13.0
-ynab-sdk-python==0.0.4
+git+https://github.com/bljustice/ynab-sdk-python.git@367c6ac1581c5d7b222b3e0dbbb288a0fe9dcbea#egg=ynab_sdk_python
 zipp==3.1.0
