@@ -1,12 +1,23 @@
 from unittest import TestCase, mock
+from moto import mock_s3
 
 from ynabdashetl.core import ExtractJob
 
+@mock_s3
 class CoreTests(TestCase):
 
     def setUp(self):
 
         self.extract_job = ExtractJob('transactions', '2022-08-17')
+
+        # need to set up a fake bucket for mock_s3 to work
+        self.extract_job.s3_client.create_bucket(
+            Bucket='ynab',
+            CreateBucketConfiguration={
+                'LocationConstraint': self.extract_job.config.AWS_REGION_NAME
+            }
+        )
+
         self.mock_response = mock.Mock(status_code=200)
         self.mock_response.json.return_value = {
             "data": {
@@ -57,6 +68,3 @@ class CoreTests(TestCase):
         mock_get.return_value = self.mock_response
         job_result = self.extract_job.run()
         self.assertEqual(job_result, True)
-
-
-
